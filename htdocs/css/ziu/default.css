@@ -1,0 +1,238 @@
+@charset "UTF-8";
+
+@import url("reset.css");
+
+/* {{{ Default Layout */
+
+.contents {
+    margin: 0 auto;
+    width: 90%;
+    text-align: left;
+    color: #333;
+}
+.title h1 {
+    margin: 15px auto;
+    width: 90%;
+    font-size: 24px;
+}
+.contents th, .contents td, .contents a {
+    color: #333;
+}
+
+/* {{{ .header_contents */
+.header_contents {
+    background-color: #b0c4de;
+    padding: 5px;
+    height: 37px;
+    margin: 0 0 30px 0;
+}
+.header_contents .menu {
+    background-color: #f0f0f0;
+    height: 37px;
+}
+.header_contents .menu li {
+    float: left;
+    height: 37px;
+    border-right: 1px solid #b0c4de;
+    background-color: #f0f0f0;
+}
+.header_contents .menu li:last-child {
+    float: right;
+    height: 37px;
+    border-right: none;
+    border-left: 1px solid #b0c4de;
+}
+.header_contents .menu li a {
+    display: block;
+    height: 37px;
+    font-weight: bold;
+    line-height: 37px;
+    text-decoration: none;
+    color: #646464;
+    padding: 0 20px;
+}
+.header_contents .menu li a:hover {
+    background-color: #fdfcf6;
+}
+/* }}} */
+
+/* {{{ .footer_contents */
+.footer_contents {
+    background-color: #fff;
+    padding: 5px;
+    margin: 10px 0 30px 0;
+    font-size: 0.8em;
+    color: #9b9b9b;
+}
+/* }}} */
+
+/* {{{ .main_contents */
+.main_contents {
+    background-color: #eee;
+    padding: 5px;
+}
+.main_contents .main {
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+/* }}} */
+
+.error {
+    color: red;
+    margin: 10px;
+}
+/* }}} */
+
+/* {{{ List Template */
+.entry, .shbox {
+    margin: 10px;
+    padding: 10px;
+    font-size: 0.8em;
+    border: solid 1px #ddd;
+    width: 100px;
+    text-align: center;
+    float: left;
+}
+.entry a, .shbox a {
+    text-decoration: none;
+}
+.list {
+    border: solid 1px #ddd;
+    margin: 10px;
+    width: 98%;
+    border-collapse: collapse;
+    font-size: 0.8em;
+}
+.list tr:nth-child(odd) {
+    background-color: #eee;
+}
+.list tr:hover {
+    background-color: #ccf;
+}
+.list tr:first-child {
+    background-color: #aaa;
+}
+.list th {
+    text-align: left;
+    border-right: solid 1px #ddd;
+    padding: 5px;
+}
+.list td {
+    border-right: solid 1px #ddd;
+    padding: 5px;
+}
+.list td:last-child {
+    text-align: center;
+}
+.list td:last-child a {
+    border: 1px solid gray;
+    text-decoration: none;
+    padding: 0 3px;
+    margin: 0 2px;
+    background-color: #eee;
+}
+.list td:last-child a:hover {
+    text-decoration: none;
+    cursor: pointer;
+}
+.search {
+    clear: both;
+    margin: 10px;
+    border: solid 1px #ddd;
+    font-size: 0.8em;
+    width: 50%;
+}
+.search th, .search td {
+    text-align: left;
+    padding: 10px;
+}
+.search input[type="text"] {
+    width: 300px;
+    border: solid 1px gray;
+    padding: 3px;
+}
+.search input[type="submit"] {
+    width: 120px;
+    height: 30px;
+}
+.paginate {
+    margin: 10px;
+    font-size: 0.8em;
+    clear: both;
+}
+.paginate a {
+}
+.paginate .prev
+, .paginate .pages
+, .paginate .next {
+    padding: 0 5px;
+}
+.paginate .pages a
+, .paginate .pages span {
+    margin: 0 2px;
+    padding: 0 2px;
+    border: 1px solid gray;
+}
+.paginate .active {
+    background-color: gray;
+    color: #fff;
+}
+/* }}} */
+
+/* {{{ Form Template */
+.edit {
+    margin: 10px 10%;
+    width: 78%;
+    font-size: 0.8em;
+}
+.edit th {
+    text-align: right;
+    padding: 5px;
+    width: 35%;
+}
+.edit td {
+    padding: 10px;
+    width: 65%;
+}
+.edit tr:last-child td {
+    padding-top: 10px;
+}
+.edit tr:last-child td a {
+    border: 1px solid gray;
+    text-decoration: none;
+    background-color: #ddd;
+    color: #000;
+    display: block;
+    padding: 5px 0;
+    width: 60px;
+    text-align: center;
+}
+.edit input {
+    border: solid 1px gray;
+    padding: 3px;
+}
+.edit input[type="text"] {
+    width: 300px;
+}
+.edit textarea {
+    border: solid 1px gray;
+    width: 300px;
+    height: 200px;
+}
+.edit input[type="submit"] {
+    width: 60px;
+    height: 30px;
+    cursor: pointer;
+}
+.edit .success {
+    padding: 5px; 
+    text-align: center;
+    background-color: #86ca5d;
+    border: 2px solid #5cb327;
+    color: #fff;
+}
+.edit .success a {
+    color: #fff;
+}
+/* }}} */
+

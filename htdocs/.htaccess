@@ -1,0 +1,15 @@
+
+# {{{ PHP Setting
+php_value short_open_tag On
+# }}}
+
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !/favicon.ico$
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php/$1 [L]
+    # Case of not using $_SERVER['PATH_INFO']
+    # RewriteRule ^(.*)$ index.php?_ZIU_PATH_INFO=$1 [L]
+</IfModule>
+
