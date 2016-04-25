@@ -95,8 +95,9 @@ class Email
         'smtp-cram'  => '_exec_smtp_cram',
     );
     private $organized = array(
-        'subject' => '',      // Subject: text
-        'body'    => array(), // Body ['text', 'html']
+        'content-type' => '',      // Content-Type:
+        'subject'      => '',      // Subject: text
+        'body'         => array(), // Body ['text', 'html']
     );
 
     private $smtp_hold = FALSE; // TRUE: keep to open smtp socket
@@ -978,7 +979,7 @@ class Email
      */
     private function _build_header($header)
     {
-        $header = array_merge($header, $this->additional);
+        $header = array_merge($header, $this->organized['content-type'], $this->additional);
         $header[] = 'X-Mailer: ' . $this->config('mailer_name');
         $header[] = 'X-Sender: ' . $this->maildata['from'][0];
         $header[] = 'Mime-Version: 1.0';
@@ -1024,7 +1025,7 @@ class Email
     private function _build_body_text($body)
     {
         $text = $this->_prepare_content_text($body[0]);
-        $this->header($text['head']);
+        $this->organized['content-type'] = $text['head'];
         return $text['data'];
     }
 
@@ -1037,11 +1038,11 @@ class Email
     {
         if ($this->config('html_multipart') === FALSE) {
             $html = $this->_prepare_content_html($body[1]);
-            $this->header($html['head']);
+            $this->organized['content-type'] = $html['head'];
             return $html['data'];
         } else {
             $alt = $this->_build_content_alternative($body);
-            $this->header($alt['head']);
+            $this->organized['content-type'] = $alt['head'];
             return $this->config('mime_message') . "\n\n" . $alt['data'];
         }
     }
@@ -1054,7 +1055,7 @@ class Email
     private function _build_body_text_attach($body)
     {
         $bound = $this->_gen_boundary('mix');
-        $this->header($this->_header_content_type_boundary('multipart/mixed', $bound));
+        $this->organized['content-type'] = $this->_header_content_type_boundary('multipart/mixed', $bound);
         $text = $this->_prepare_content_text($body[0]);
         $str = $this->config('mime_message') . "\n\n";
         $str .= "--$bound\n";
@@ -1089,7 +1090,7 @@ class Email
                 $tags[$tag] = basename($val[0]);
             }
         }
-        $this->header($this->_header_content_type_boundary('multipart/mixed', $bound));
+        $this->organized['content-type'] = $this->_header_content_type_boundary('multipart/mixed', $bound);
         $alt = $this->_build_content_alternative($body, $tags);
         $str = $this->config('mime_message') . "\n\n";
         $str .= "--$bound\n";
