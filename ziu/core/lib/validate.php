@@ -72,8 +72,10 @@ class Validate
         // }}}
     );
     private $config = array(
+        'subdir' => '',
         'lang' => 'ja',
         'separator' => ',',
+        'get_errors_type' => 'string', // string or array
         'regex' => array(
             'trim' => '/^(\x20|\xe3\x80\x80).*|.*(\x20|\xe3\x80\x80)$/',
             'alpha' => '/^([a-z])+$/i',
@@ -120,12 +122,13 @@ class Validate
      */
     public function __construct($config = array())
     {
-        $this->subdir = dirname(__FILE__) . DS . 'validate' . DS;
-        require_once $this->subdir . 'exception.php';
+        $subdir = dirname(__FILE__) . DS . 'validate';
+        require_once $subdir . DS . 'exception.php';
         if (! class_exists('Validate_Exception')) {
             // error operation
             trigger_error('[validate.php] Validate_Exception not exists.', E_USER_WARNING);
         }
+        $config += array('subdir' => $subdir);
         $this->config($config);
     }
     // }}}
@@ -144,7 +147,7 @@ class Validate
         $this->rules = array();
         $this->mb = function_exists('mb_strlen');
         $this->config($config);
-        $state_path = $this->subdir . 'state_' . $this->config['lang'] . '.php';
+        $state_path = $this->config['subdir'] . DS . 'state_' . $this->config['lang'] . '.php';
         if (is_readable($state_path)) {
             self::$state = array_merge(self::$state, require $state_path);
         }
@@ -166,7 +169,7 @@ class Validate
         }
         if (is_array($config)) { // set
             foreach ($config as $name => $value) {
-                if (isset($origin[$name])) {
+                if (array_key_exists($name, $origin)) {
                    if (is_array($value)) {
                         $this->config($value, $origin[$name]);
                     } else {
@@ -177,7 +180,7 @@ class Validate
         } elseif (is_string($config)) { // get
             $node = explode('/', $config);
             foreach ($node as $key => $name) {
-                if (isset($origin[$name])) {
+                if (array_key_exists($name, $origin)) {
                     return isset($node[$key + 1])
                         ? $this->config(implode('/', array_slice($node, 1)), $origin[$name])
                         : $origin[$name]
@@ -356,7 +359,8 @@ class Validate
                 // $allow is TRUE and $value is NULL, in case of NULL value passing validation.
                 // in_array($fild, $allow), in case of field passing validation.
                 continue;
-            } try {
+            }
+            try {
                 foreach ($this->rules[$this->action][$field] as $rule) {
                     $method = $rule[0];
                     $params = $rule[1];
@@ -423,11 +427,21 @@ class Validate
      */
     public function get_errors($format, $pre = '', $suf = "\n")
     {
-        $msg = '';
-        foreach ($this->error() as $error) {
-            $msg .= $pre . $error->message($format) . $suf;
+        if ($this->config['get_errors_type'] == 'array') {
+            $list = array();
+            foreach ($this->error() as $field => $error) {
+                $list[$field] = $error->message($format);
+            }
+            $result = $list;
+        } else {
+            // string
+            $msg = '';
+            foreach ($this->error() as $error) {
+                $msg .= $pre . $error->message($format) . $suf;
+            }
+            $result = trim($msg);
         }
-        return trim($msg);
+        return $result;
     }
     // }}}
 
