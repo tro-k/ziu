@@ -128,7 +128,9 @@ class Validate
             // error operation
             trigger_error('[validate.php] Validate_Exception not exists.', E_USER_WARNING);
         }
-        $config += array('subdir' => $subdir);
+        if (empty($this->config['subdir'])) {
+            $this->config['subdir'] = $subdir;
+        }
         $this->config($config);
     }
     // }}}
