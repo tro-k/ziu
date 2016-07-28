@@ -21,9 +21,11 @@ class Database_Select extends Database_Where
     private $group = array();
     private $having = array();
     private $order = array();
+    private $union = '';
     private $limit  = NULL;
     private $offset = NULL;
     private $default_table = FALSE;
+    private $in_union = FALSE;
 
     // {{{ cols
     /**
@@ -312,23 +314,72 @@ class Database_Select extends Database_Where
     }
     // }}}
 
+    // {{{ union
+    /**
+     * Union
+     * @param object () : Database_Select
+     * @return object this
+     */
+    public function union()
+    {
+        $union = func_get_args();
+        $all = '';
+        if (strtolower($union[0]) == 'all') {
+            array_shift($union);
+            $all = ' all';
+        }
+        $this->in_union = TRUE;
+        foreach ($union as $val) {
+            $sql = $val instanceof Database_Select ? $this->_sub_select($val) : $val;
+            $this->union .= " union{$all} ({$sql})";
+        }
+        $this->in_union = FALSE;
+        return $this;
+    }
+
+    /**
+     * Union
+     * @return string query of union
+     */
+    public function _union()
+    {
+        return $this->union;
+    }
+    // }}}
+
     /**
      * Build
      * @return string completed query of select
      */
     public function build()
     {
-        $this->query = 'select ';
-        $this->query .= $this->_cols();
-        $this->query .= $this->_from();
-        $this->query .= $this->_join();
-        $this->query .= $this->_where();
-        $this->query .= $this->_group();
-        $this->query .= $this->_having();
-        $this->query .= $this->_order();
-        $this->query .= $this->_limit();
-        $this->query .= $this->_offset();
-        $this->query .= ' ;';
+        if (! empty($this->union) && $this->in_union === FALSE) {
+            $this->query = '(select ';
+            $this->query .= $this->_cols();
+            $this->query .= $this->_from();
+            $this->query .= $this->_join();
+            $this->query .= $this->_where();
+            $this->query .= $this->_group();
+            $this->query .= $this->_having();
+            $this->query .= ')';
+            $this->query .= $this->_union();
+            $this->query .= $this->_order();
+            $this->query .= $this->_limit();
+            $this->query .= $this->_offset();
+            $this->query .= ' ;';
+        } else {
+            $this->query = 'select ';
+            $this->query .= $this->_cols();
+            $this->query .= $this->_from();
+            $this->query .= $this->_join();
+            $this->query .= $this->_where();
+            $this->query .= $this->_group();
+            $this->query .= $this->_having();
+            $this->query .= $this->_order();
+            $this->query .= $this->_limit();
+            $this->query .= $this->_offset();
+            $this->query .= ' ;';
+        }
         return $this->query;
     }
 
