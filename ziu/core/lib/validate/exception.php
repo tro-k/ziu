@@ -45,7 +45,9 @@ class Validate_Exception extends Exception
     protected function _replace($msg)
     {
         foreach ($this->place as $key => $val) {
-            $msg = str_replace($key, $val, $msg);
+            if (is_string($val)) {
+                $msg = str_replace($key, $val, $msg);
+            }
         }
         return $msg;
     }

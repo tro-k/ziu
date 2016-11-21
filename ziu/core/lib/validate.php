@@ -146,6 +146,7 @@ class Validate
     {
         $this->action = $action;
         $this->class = array($this);
+        $this->field = array();
         $this->rules = array();
         $this->mb = function_exists('mb_strlen');
         $this->config($config);
