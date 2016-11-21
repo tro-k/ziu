@@ -32,6 +32,8 @@ class Session
         'namespace' => 'SSLIB',
     );
 
+    private $session_id = NULL;
+
     private $namespace = NULL;
     // }}}
 
@@ -69,6 +71,9 @@ class Session
             if (! isset($_SESSION[$this->namespace])) {
                 $_SESSION[$this->namespace] = NULL;
             }
+        }
+        if (is_null($this->session_id)) {
+            $this->session_id = session_regenerate_id();
         }
         return $this;
     }
