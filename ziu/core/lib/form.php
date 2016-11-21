@@ -552,7 +552,7 @@ class Form
                 // single(= string) value
                 $attr = array(
                     'type'  => $type,
-                    'name'  => $name,
+                    'name'  => $this->_security($name),
                     'value' => $this->_value($name, $value),
                 );
                 $html .= '<input ' . $this->_attr_to_str($attr) . ' />';
