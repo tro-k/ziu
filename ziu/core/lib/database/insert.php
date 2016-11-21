@@ -39,7 +39,13 @@ class Database_Insert extends Database_Query
     public function values(array $vals)
     {
         $vals = func_get_args();
-        $this->vals = array_merge($this->vals, $vals);
+        foreach ($vals as $val) {
+            if (isset($val[0])) {
+                $this->vals = array_merge($this->vals, $val);
+            } else {
+                $this->vals[] = $val;
+            }
+        }
         return $this;
     }
 

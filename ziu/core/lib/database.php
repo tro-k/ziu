@@ -36,6 +36,7 @@ class Database
      * Variables
      */
     private $connect = FALSE;
+    private $driver  = FALSE;
     private $builder = FALSE;
     private $statement = FALSE;
     private $sqlmode = FALSE;
@@ -47,6 +48,9 @@ class Database
                             'charset' => 'utf8',
                             'pooling' => FALSE,
                             'autocommit' => TRUE,
+                            'ssl-crt' => '',
+                            'ssl-key' => '',
+                            'ssl-ca'  => '',
                             'reporting'  => 'exception', // silent, warning or exception
                             'table' => '', // default table name
                         );
@@ -97,6 +101,18 @@ class Database
             }
             if (($level = $this->_reporting()) !== FALSE) {
                 $attr[PDO::ATTR_ERRMODE] = $level;
+            }
+            list($this->driver) = explode(':', $this->config('dsn'));
+            if ($this->driver == 'mysql') {
+                if ($this->config('ssl-crt')) {
+                    $attr[PDO::MYSQL_ATTR_SSL_CERT] = $this->config('ssl-crt');
+                }
+                if ($this->config('ssl-key')) {
+                    $attr[PDO::MYSQL_ATTR_SSL_KEY] = $this->config('ssl-key');
+                }
+                if ($this->config('ssl-ca')) {
+                    $attr[PDO::MYSQL_ATTR_SSL_CA] = $this->config('ssl-ca');
+                }
             }
             $this->connect = new PDO($this->config('dsn')
                                     , $this->config('user')
