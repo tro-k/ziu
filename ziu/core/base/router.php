@@ -198,8 +198,8 @@ class Ziu_Router
     {
         $result = FALSE;
         foreach (explode(',', $this->conf['suffix_join']) as $type) {
-            $file = $this->conf['app_path']
-                     . str_replace('/', DS, $path) . '.' . $type . '.php';
+            $dir = $type == $this->conf['suffix_view'] ? $this->conf['view_path'] : $this->conf['app_path'];
+            $file = $dir . str_replace('/', DS, $path) . '.' . $type . '.php';
             if (file_exists($file)) {
                 $result = TRUE;
                 break;
@@ -215,7 +215,7 @@ class Ziu_Router
      */
     private function _is_module_dir($path)
     {
-        return is_dir($this->conf['app_path'] . $path);
+        return is_dir($this->conf['app_path'] . $path) || is_dir($this->conf['view_path'] . $path);
     }
 
     /**
