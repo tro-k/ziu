@@ -203,7 +203,7 @@ class Form
     {
         $this->html = $this->_fetch_value($name, $value);
         $this->html = (bool)$sanitize ? htmlspecialchars($this->html, ENT_QUOTES) : $this->html;
-        return $this;
+        return (string)$this;
     }
 
     /**
